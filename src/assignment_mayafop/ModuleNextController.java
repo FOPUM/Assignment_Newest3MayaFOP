@@ -419,14 +419,14 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                                         "tutorial.tutorial_id, tutorial.tutorial_day, tutorial.tutorial_start_time, tutorial.tutorial_end_time, tutorial.tutorial_location, staff_teach_tutorial.staff_id AS tutostaff,\n" +
                                         "lab.lab_id, lab.lab_day, lab.lab_start_time, lab.lab_start_time, lab.lab_end_time, lab.lab_location, staff_teach_lab.staff_id as labstaff\n" +
                                         "FROM course\n" +
-                                        "INNER JOIN course_occ ON course.course_id=course_occ.course_id\n" +
-                                        "RIGHT JOIN occ ON course_occ.occ_id=occ.occ_id\n" +
-                                        "INNER JOIN lecture ON lecture.lecture_id=occ.lecture_id\n" +
-                                        "INNER JOIN staff_teach_lecture ON occ.lecture_id=staff_teach_lecture.lecture_id\n" +
-                                        "INNER JOIN tutorial ON tutorial.tutorial_id=occ.tutorial_id\n" +
-                                        "INNER JOIN staff_teach_tutorial ON staff_teach_tutorial.tutorial_id=tutorial.tutorial_id\n" +
-                                        "INNER JOIN lab ON lab.lab_id=occ.lab_id\n" +
-                                        "INNER JOIN staff_teach_lab ON staff_teach_lab.lab_id=occ.lab_id\n" +
+                                        "LEFT JOIN course_occ ON course.course_id=course_occ.course_id\n" +
+                                        "LEFT JOIN occ ON course_occ.occ_id=occ.occ_id\n" +
+                                        "LEFT JOIN lecture ON lecture.lecture_id=occ.lecture_id\n" +
+                                        "LEFT JOIN staff_teach_lecture ON occ.lecture_id=staff_teach_lecture.lecture_id\n" +
+                                        "LEFT JOIN tutorial ON tutorial.tutorial_id=occ.tutorial_id\n" +
+                                        "LEFT JOIN staff_teach_tutorial ON staff_teach_tutorial.tutorial_id=tutorial.tutorial_id\n" +
+                                        "LEFT JOIN lab ON lab.lab_id=occ.lab_id\n" +
+                                        "LEFT JOIN staff_teach_lab ON staff_teach_lab.lab_id=occ.lab_id\n" +
                                         "WHERE course.course_id='"+courseID+"'";
         
         try {
@@ -765,17 +765,17 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                     PreparedStatement occStatement = connectDB.prepareStatement("INSERT INTO occ VALUES (?,?,?,?,?,?)");
                     occStatement.setString(1,courseID + "_OCC" + actOcc);
                     occStatement.setString(2,"OCC" + actOcc);
-                    if(lectday.get(j).equals("null")){
+                    if(!lectday.get(j).isEmpty()){
                         occStatement.setString(3,lectID);
                     }else{
                         occStatement.setString(3,"NONE");
                     }
-                    if(tutoday.get(j).equals("null")){
+                    if(!tutoday.get(j).isEmpty()){
                         occStatement.setString(4,tutoID);
                     }else{
                         occStatement.setString(4,"NONE");
                     }
-                    if(labday.get(j).equals("null")){
+                    if(!labday.get(j).isEmpty()){
                         occStatement.setString(5,labID);
                     }else{
                         occStatement.setString(5,"NONE");
