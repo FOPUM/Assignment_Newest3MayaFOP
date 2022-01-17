@@ -68,7 +68,7 @@
                               <Font size="10.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lectStaffNameLabel" alignment="CENTER" layoutX="10.0" layoutY="50.0" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" text="Staff Name: Ang Tang Fong&#10;" textFill="WHITE">
+                        <Label fx:id="lectStaffNameLabel" alignment="CENTER" layoutX="10.0" layoutY="50.0" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" textFill="WHITE">
                            <font>
                               <Font name="Futura Medium BT" size="9.0" />
                            </font>
@@ -127,7 +127,7 @@
                               <Font size="10.0" />
                            </font>
                         </Label>
-                        <Label fx:id="tutoStaffNameLabel" alignment="CENTER" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" text="Staff Name: Ang Tang Fong&#10;" textFill="WHITE">
+                        <Label fx:id="tutoStaffNameLabel" alignment="CENTER" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" textFill="WHITE">
                            <font>
                               <Font name="Futura Medium BT" size="9.0" />
                            </font>
@@ -186,7 +186,7 @@
                               <Font size="10.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labStaffNameLabel" alignment="CENTER" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" text="Staff Name: Ang Tang Fong&#10;" textFill="WHITE">
+                        <Label fx:id="labStaffNameLabel" alignment="CENTER" prefHeight="24.0" prefWidth="115.0" styleClass="bluetext" textFill="WHITE">
                            <font>
                               <Font name="Futura Medium BT" size="9.0" />
                            </font>

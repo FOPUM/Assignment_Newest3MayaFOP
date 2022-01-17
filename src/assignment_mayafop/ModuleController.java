@@ -101,7 +101,7 @@ public class ModuleController implements Initializable, ControlledScreen{
         courseNameTextField.setText(courseNameSetter);
         creditHourTextField.setText(creditHourSetter);
         if(courseCategorySetter != null){
-            courseCategoryComboBox.setValue(misc.formatToFullCategory(courseCategorySetter));
+            courseCategoryComboBox.setValue(courseCategorySetter);
         }
         courseYearComboBox.setValue(CourseYearSetter);
         courseSemComboBox.setValue(courseSemSetter);
