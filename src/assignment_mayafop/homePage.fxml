@@ -49,36 +49,36 @@
             </Rectangle>
             <Pane fx:id="image1" layoutX="552.0" layoutY="59.0" prefHeight="262.0" prefWidth="429.0">
                <children>
-                  <ImageView fitHeight="255.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="244.0" fitWidth="430.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/Exit.png" />
+                        <Image url="@Images/image-20210921141427-1.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
             <Pane fx:id="image2" layoutX="552.0" layoutY="59.0" prefHeight="262.0" prefWidth="429.0">
                <children>
-                  <ImageView fitHeight="255.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="267.0" fitWidth="429.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/Home_blue.png" />
+                        <Image url="@Images/jawatan-kosong-universiti-malaya-um-ppumr.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
             <Pane fx:id="image3" layoutX="552.0" layoutY="59.0" prefHeight="262.0" prefWidth="429.0">
                <children>
-                  <ImageView fitHeight="255.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="264.0" fitWidth="429.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/Dashboard_grey.png" />
+                        <Image url="@Images/553231.jpg" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="image4" layoutX="552.0" layoutY="59.0" prefHeight="262.0" prefWidth="429.0">
+            <Pane fx:id="image4" layoutX="552.0" layoutY="59.0" prefHeight="256.0" prefWidth="429.0">
                <children>
-                  <ImageView fitHeight="255.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="276.0" fitWidth="432.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/back.png" />
+                        <Image url="@Images/diplomaUMr.jpg" />
                      </image>
                   </ImageView>
                </children>
