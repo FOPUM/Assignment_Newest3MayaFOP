@@ -181,6 +181,7 @@ public class registeredModuleController implements Initializable, ControlledScre
                     if(confirmedDrop){
                         dropModuleUpdateUI(nodes,h);
                         dropModuleUpdateDatabase(h);
+                        confirmedDrop =false;
                         
                     }
 
@@ -236,8 +237,7 @@ public class registeredModuleController implements Initializable, ControlledScre
                     if(confirmedDrop){
                         dropModuleUpdateUI(nodes,h);
                         dropModuleUpdateDatabase(h);
-                        searchModule smController = new searchModule();
-                        smController.timeMemoryClear();
+                        confirmedDrop = false;
                     }
                 });
                 setConfirmedDrop(false);
