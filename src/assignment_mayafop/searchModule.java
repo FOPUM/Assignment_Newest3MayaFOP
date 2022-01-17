@@ -140,8 +140,12 @@ public class searchModule implements Initializable, ControlledScreen {
     private static ArrayList<String> courseIDcheck = new ArrayList<String>();
     
     private static ArrayList<String> dayCheck = new ArrayList<String>();
+    private static ArrayList<String> selectedDayCheck = new ArrayList<String>();
     private static ArrayList<String> startTimeCheck = new ArrayList<String>();
+    private static ArrayList<String> selectedStartTimeCheck = new ArrayList<String>();
     private static ArrayList<String> endTimeCheck = new ArrayList<String>();
+    private static ArrayList<String> selectedEndTimeCheck = new ArrayList<String>();
+    private static ArrayList<Integer> selectedTableIndex = new ArrayList<Integer>();
         
     Node[] nodes = new Node[10];
     public int totalCreditHours;
@@ -179,6 +183,18 @@ public class searchModule implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         courseIDcheck.clear();
+        occurenceIDcheck.clear();
+        selectedDayCheck.clear();
+        selectedStartTimeCheck.clear();
+        selectedEndTimeCheck.clear();
+        timeMemoryClear();
+        for (int j = 0; j < courseIDarray.size(); j++) {
+            System.out.println("courseIDarray at j: " + j + " is " +courseIDarray.get(j));
+        }
+        for (int j = 0; j < occurenceID.size(); j++) {
+            System.out.println("occurenceID at j: " + j + " is " +occurenceID.get(j));
+        }
+        
 //        coursesModel.clear();
         
         if(accStatus == 'S'){
@@ -206,6 +222,12 @@ public class searchModule implements Initializable, ControlledScreen {
             
             //Query for current registered course in an array
             fetchTakenCourseFromDatabase();
+        for (int j = 0; j < occurenceIDcheck.size(); j++) {
+            System.out.println("occurenceIDcheck at j: " + j + " is " +occurenceIDcheck.get(j));
+        }
+        for (int j = 0; j < courseIDcheck.size(); j++) {
+            System.out.println("courseIDcheck at j: " + j + " is " +courseIDcheck.get(j));
+        }
             
             int studentBand = 0;
             String studentNationality = null; 
@@ -224,7 +246,7 @@ public class searchModule implements Initializable, ControlledScreen {
                 credithourcheck = queryForStudentQualification.getInt("credit_hour");
             }
             
-            fetchCourseTimeFromDatabase();
+            
             
             totalCreditHours = credithourcheck;
             creditHour.forEach((hour)-> totalCreditHours+=hour);
@@ -469,8 +491,18 @@ public class searchModule implements Initializable, ControlledScreen {
         }
         
         System.out.println("Courseidarray size: " + courseIDarray.size());
-        //reinsert the recent added modules
-        reinsertRecentAddedModules();
+        try {
+            //reinsert the recent added modules
+            reinsertRecentAddedModules();
+            for (int j = 0; j < selectedDayCheck.size(); j++) {
+                dayCheck.add(selectedDayCheck.get(j));
+                startTimeCheck.add(selectedStartTimeCheck.get(j));
+                endTimeCheck.add(selectedEndTimeCheck.get(j));
+            }
+            fetchCourseTimeFromDatabase();
+        } catch (SQLException ex) {
+            Logger.getLogger(searchModule.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -509,7 +541,7 @@ public class searchModule implements Initializable, ControlledScreen {
                 Date endTime = sdf.parse(endTimeString);
                 System.out.println("End Time of this picking lecture is: " + endTime);
                 for (int j = 0; j < startlist.size(); j++) {
-                    if (!startlist.get(j).equals("null")) {
+                    if (startlist.get(j) != null ) {
                         Date startTimeForCheck = sdf.parse(startlist.get(j));
                         System.out.println(startTime+ " Checking with: " + startTimeForCheck);
                         Date endTimeForCheck = sdf.parse(endlist.get(j));
@@ -538,7 +570,7 @@ public class searchModule implements Initializable, ControlledScreen {
     
     public int checkDay(String studyDay, ArrayList<String> studyDayArray) {
 //        System.out.println("ori " + studyDay);
-        if(studyDay.equals("null")){
+        if(!studyDay.equals("null")){
             for (int j = 0; j < studyDayArray.size(); j++) {
                 if(studyDay.equals(studyDayArray.get(j))){
                     System.out.println("Study day: " + studyDay + " is equal to " + studyDayArray.get(j) + " in array");
@@ -655,21 +687,31 @@ public class searchModule implements Initializable, ControlledScreen {
                             coursesModel.add(addingCourse);
                             occurenceID.add(occID);
                             courseNames.add(courseName);
+                            selectedTableIndex.add(courseTableView.getSelectionModel().getSelectedIndex());
                                                         
                             dayCheck.add(lectday);
+                            selectedDayCheck.add(lectday);
                             System.out.println(dayCheck.get(0)+dayCheck.size());
                             startTimeCheck.add(lectStartTime);
+                            selectedStartTimeCheck.add(lectStartTime);
                             endTimeCheck.add(lectEndTime);
+                            selectedEndTimeCheck.add(lectEndTime);
                             
                             dayCheck.add(tutoday);
+                            selectedDayCheck.add(tutoday);
                             System.out.println(dayCheck.get(1) +dayCheck.size());
                             startTimeCheck.add(tutoStartTime);
+                            selectedStartTimeCheck.add(tutoStartTime);
                             endTimeCheck.add(tutoEndTime);
+                            selectedEndTimeCheck.add(tutoEndTime);
                             
                             dayCheck.add(labday);
+                            selectedDayCheck.add(labday);
                             System.out.println(dayCheck.get(2) +dayCheck.size());
                             startTimeCheck.add(labStartTime);
+                            selectedStartTimeCheck.add(labStartTime);
                             endTimeCheck.add(labEndTime);
+                            selectedEndTimeCheck.add(labEndTime);
         
 //                            System.out.println(addingCourse + " Has been add");
                         }
@@ -729,20 +771,30 @@ public class searchModule implements Initializable, ControlledScreen {
         courseNames.remove(i);
         vCourseNames.getChildren().remove(nodes[i]);
         dayCheck.remove(i*3+2);
+        selectedDayCheck.remove(i*3+2);
         dayCheck.remove(i*3+1);
+        selectedDayCheck.remove(i*3+1);
         dayCheck.remove(i*3);
+        selectedDayCheck.remove(i*3);
         System.out.println("Start time check for lab has been removed: " + startTimeCheck.get(i*3+2));
         startTimeCheck.remove(i*3+2);
+        selectedStartTimeCheck.remove(i*3+2);
         System.out.println("Start time check for tutorial has been removed: " + startTimeCheck.get(i*3+1));
         startTimeCheck.remove(i*3+1);
+        selectedStartTimeCheck.remove(i*3+1);
         System.out.println("Start time check for lecture has been removed: " + startTimeCheck.get(i*3+0));
         startTimeCheck.remove(i*3);
+        selectedStartTimeCheck.remove(i*3);
         System.out.println("End time check for lab has been removed: " + endTimeCheck.get(i*3+2));
         endTimeCheck.remove(i*3+2);
+        selectedEndTimeCheck.remove(i*3+2);
         System.out.println("End time check for tutorial has been removed: " + endTimeCheck.get(i*3+1));
         endTimeCheck.remove(i*3+1);
+        selectedEndTimeCheck.remove(i*3+1);
         System.out.println("End time check for lecture has been removed: " + endTimeCheck.get(i*3+0));
         endTimeCheck.remove(i*3);
+        selectedEndTimeCheck.remove(i*3);
+        selectedTableIndex.remove(i);
         
         for (int j = i; j < vCourseNames.getChildren().size(); j++) {
         try {
@@ -803,13 +855,13 @@ public class searchModule implements Initializable, ControlledScreen {
 
                 double unsimilarity = 0;
                 String searchKeyword = newValue.toLowerCase();
-                System.out.println("Seach keyword is: " + searchKeyword);
-                System.out.println("The coursename is: " +courseSearchModel.getCourseName().toLowerCase());
+//                System.out.println("Seach keyword is: " + searchKeyword);
+//                System.out.println("The coursename is: " +courseSearchModel.getCourseName().toLowerCase());
                 char[] courseNameCheckerArray = courseSearchModel.getCourseName().toLowerCase().toCharArray();
                 if (searchKeyword.length() <= courseSearchModel.getCourseName().toLowerCase().length() ) {
                     for (int k = 0; k < searchKeyword.length(); k++) {
                         if (searchKeyword.charAt(k) != courseNameCheckerArray[k]) {
-                            System.out.println(searchKeyword.charAt(k)+ " is different with " + courseNameCheckerArray[k]);
+//                            System.out.println(searchKeyword.charAt(k)+ " is different with " + courseNameCheckerArray[k]);
                             unsimilarity++;
                         }
                     }
@@ -819,7 +871,7 @@ public class searchModule implements Initializable, ControlledScreen {
                 }
                 
                 unsimilarity = (unsimilarity / searchKeyword.length())*100.00;
-                System.out.println("Unsimilarity%: " + unsimilarity);
+//                System.out.println("Unsimilarity%: " + unsimilarity);
                 if (courseSearchModel.getCourseName().toLowerCase().indexOf(searchKeyword) > -1 || unsimilarity <=30) {
                     return true; // Found a match in course name
                 } else if (courseSearchModel.getCourseID().toLowerCase().indexOf(searchKeyword) > -1) {
@@ -1080,6 +1132,7 @@ public class searchModule implements Initializable, ControlledScreen {
         startTimeCheck.clear();
         endTimeCheck.clear();
         vCourseNames.getChildren().clear();
+        selectedTableIndex.clear();
     }
     
     public void clearMemoryWhenLogout(){
@@ -1209,9 +1262,33 @@ public class searchModule implements Initializable, ControlledScreen {
         }
     }
     
-    public void reinsertRecentAddedModules(){
+    public void reinsertRecentAddedModules() throws SQLException{
         try{
             for (int j = 0; j < courseIDarray.size(); j++) {
+                courseTableView.getSelectionModel().select(selectedTableIndex.get(j));
+                selectedDayCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLectDay());
+                selectedStartTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLectStartTime());
+                selectedEndTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLectEndTime());
+                
+                selectedDayCheck.add(courseTableView.getSelectionModel().getSelectedItem().getTutoDay());
+                selectedStartTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getTutoStartTime());
+                selectedEndTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getTutoEndTime());
+                
+                selectedDayCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLabDay());
+                selectedStartTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLabStartTime());
+                selectedEndTimeCheck.add(courseTableView.getSelectionModel().getSelectedItem().getLabEndTime());
+//                String query = "Select * from occ WHERE occ_id = '" + occurenceID.get(j) + "'";
+//                courseTableView.getSelectionModel().select(t);
+//                ResultSet queryForAddingTime = connectDB.createStatement().executeQuery(query);
+//                while (queryForAddingTime.next()) {
+//                    String lecture_id = queryForAddingTime.getString("lecture_id");
+//                    String lectureQuery = "Select * from lecture WHERE lecture_id = '" + lecture_id + "'";
+//                    ResultSet lectureQueryResult = connectDB.createStatement().executeQuery(lectureQuery);
+//                    if (lectureQueryResult.next()) {
+//                        selectedDayCheck.add(lectureQueryResult.getString("lecture_day"));
+//                    }
+//                    
+//                }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/Assignment_MayaFOP/pickedModule.fxml"));
                 nodes[j] = loader.load();
