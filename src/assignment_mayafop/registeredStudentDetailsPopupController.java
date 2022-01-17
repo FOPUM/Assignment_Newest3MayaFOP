@@ -57,15 +57,22 @@ public class registeredStudentDetailsPopupController implements Initializable{
     @FXML
     private VBox vContainerRegisteredStudent;
     
+    private String occ;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        
-        getCourseDetailsStudent();
+        registeredStudentController control = new registeredStudentController();
+        occ = control.getOcc();
+        System.out.println("This is " +occ);
+        try {
+            getCourseDetailsStudent();
+        } catch (SQLException ex) {
+            Logger.getLogger(registeredStudentDetailsPopupController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         insertCourseDetails();
         
     }
     
-    public void setContentInfo(String coursecode, String coursename, String courseocc, String coursecapacity, String coursemode, String courseday, String coursetime, String courselocation){
+    public void setContentInfo(String coursecode, String coursename, String courseocc, String coursecapacity, String coursemode, String courseday, String coursetime, String courselocation, String occur){
         courseCodeLabel.setText(coursecode);
         courseNameLabel.setText(misc.upperLetter(coursename));
         courseOccLabel.setText("Occurence: " + courseocc.substring(3));
@@ -74,7 +81,8 @@ public class registeredStudentDetailsPopupController implements Initializable{
         courseTimeLabel.setText(coursetime);
         courseLocationLabel.setText(misc.upperLetter(courselocation));
         courseModeLabel.setText(coursemode.toUpperCase());  
-        
+        this.occ = occur;
+        System.out.println("Occ is " + occ);
     }
 
     
@@ -88,54 +96,68 @@ public class registeredStudentDetailsPopupController implements Initializable{
     
     private static ArrayList<String> matricID = new ArrayList<String>();
     private static ArrayList<String> studentName = new ArrayList<String>();
+    private static ArrayList<Integer> numberOfStudents = new ArrayList<Integer>();
+    
     List<registeredStuentDetailsPopupTextModel> studentDetails = new ArrayList<>();
     
     registeredStudentController previousController = new registeredStudentController();
     private ArrayList<String> occID = previousController.getOccIDStaff();
     
-    public void getCourseDetailsStudent(){
+    public void getCourseDetailsStudent() throws SQLException{
+        matricID.clear();
+        studentName.clear();
         
 //        System.out.println(occID.size());
-        if(occID.size() != 0){
-            try {
-                for (int i = 0; i < occID.size(); i++) {
-                    for (int j = 0; j < occID.size(); j++) {
-                        if (occID.get(i).equals(occID.get(j))) {
-                            occID.remove(j);
-                        }
-                    }
-                }
-                for (int i = 0; i < occID.size(); i++) {
-                    System.out.println(i);
-                    System.out.println(occID.get(i));
+//        if(occID.size() != 0){
+//            try {
+//                for (int i = 0; i < occID.size(); i++) {
+//                    for (int j = 0; j < occID.size(); j++) {
+//                        if (occID.get(i).equals(occID.get(j)) && i != j) {
+//                            System.out.println("occID is removed this: " + occID.get(j));
+//                            occID.remove(j);
+//                        }
+//                    }
+//                }
+//                System.out.println("OccIDSize is : " + occID.size());
+//                for (int i = 0; i < occID.size(); i++) {
+//                    numberOfStudents.add(-1);
+//                    System.out.println("occID got: " + occID.get(i));
+//                }
+//                for (int i = 0; i < occID.size(); i++) {
+                    boolean gotStudents = false;
+//                    System.out.println(i);
+//                    System.out.println(occID.get(i));
                     String courseDetailss="SELECT student_take_course.matric_num AS matricID, student.student_name AS studentName\n" +
                                     "FROM student_take_course\n" +
                                     "INNER JOIN student ON student.matric_num=student_take_course.matric_num\n" +
-                                    "WHERE student_take_course.course_status='y' AND student_take_course.occ_id='"+occID.get(i)+"'";
+                                    "WHERE student_take_course.course_status='y' AND student_take_course.occ_id='"+occ+"'";
                     ResultSet courseIDQuery = connectDB.createStatement().executeQuery(courseDetailss);
                     while(courseIDQuery.next()) {
                         matricID.add(courseIDQuery.getString("matricID"));
                         studentName.add(courseIDQuery.getString("studentName"));
-
+//                        numberOfStudents.set(i, matricID.size()-1);
+                        gotStudents = true;
                     } 
-                    if (matricID.isEmpty() && studentName.isEmpty()) {
+                    if (!gotStudents) {
+                            gotStudents = true;
                             matricID.add("No student arh");
                             studentName.add("");
                             System.out.println("Matric Id and Student Name is empty");
+//                            System.out.println("Matric id = " + matricID.get(i));
+//                            System.out.println("StudentName id = " + studentName.get(i));
+//                            numberOfStudents.set(i, matricID.size()-1);
                         }
-                    System.out.println("Matric id = " + matricID.get(i));
-                    System.out.println("StudentName id = " + studentName.get(i));
 
-                }
+//                }
 
 
 
-            } catch (SQLException e) {
-                Logger.getLogger(userAccount.class.getName()).log(Level.SEVERE, null, e);
-                e.printStackTrace();
-            }
+//            } catch (SQLException e) {
+//                Logger.getLogger(userAccount.class.getName()).log(Level.SEVERE, null, e);
+//                e.printStackTrace();
+//            }
         }
-    }
+    
 
     public void insertCourseDetails(){
         

@@ -77,8 +77,8 @@ public class login_controller implements Initializable,ControlledScreen{
     public void initialize(URL url, ResourceBundle resourceBundle) {
 //        String otp = otpGenerator();  //testing ******************************************************************************************************
 //        sendOtpToForgotter("kwanyang29@gmail.com","Kwan Yang", otp); // testing **********************************************************************
-        username_text_field.setText("u2102857");
-        password_field.setText("U2102857");
+        username_text_field.setText("A1001");
+        password_field.setText("angtf");
         if (loginAttemptFile.exists()) {
             try {
             
