@@ -195,7 +195,7 @@ public class searchModule implements Initializable, ControlledScreen {
             System.out.println("occurenceID at j: " + j + " is " +occurenceID.get(j));
         }
         
-//        coursesModel.clear();
+        coursesModel.clear();
         
         if(accStatus == 'S'){
             editCourseButton.setVisible(false);
@@ -723,7 +723,8 @@ public class searchModule implements Initializable, ControlledScreen {
                         creditHour.add(credithours);
 
                         pickedModuleController controller = loader.getController();     
-                        controller.setCourseName(coursesModel.get(i).getCourseIDLabel());
+                        controller.setCourseName(courseIDarray.get(i));
+//                        controller.setCourseName(coursesModel.get(i).getCourseIDLabel());
 
 
                         vCourseNames.getChildren().add(nodes[i]);
@@ -766,7 +767,7 @@ public class searchModule implements Initializable, ControlledScreen {
     
     public void deleteModule(int i) {
         courseIDarray.remove(i);
-        coursesModel.remove(i);
+//        coursesModel.remove(i);
         occurenceID.remove(i);
         courseNames.remove(i);
         vCourseNames.getChildren().remove(nodes[i]);
@@ -806,7 +807,8 @@ public class searchModule implements Initializable, ControlledScreen {
             nodes[h] = loader.load();
             pickedModuleController controller = loader.getController();
             nodes[j] = nodes[j+1];
-            controller.setCourseName(coursesModel.get(j).getCourseIDLabel());
+            controller.setCourseName(courseIDarray.get(j));
+//            controller.setCourseName(coursesModel.get(j).getCourseIDLabel());
 
                         nodes[h].setOnMouseEntered(evt -> {
                             //add effect
@@ -1293,8 +1295,8 @@ public class searchModule implements Initializable, ControlledScreen {
                 loader.setLocation(getClass().getResource("/Assignment_MayaFOP/pickedModule.fxml"));
                 nodes[j] = loader.load();
                 pickedModuleController controller = loader.getController();
-//                controller.setCourseName(courseIDarray.get(j));
-                controller.setCourseName(coursesModel.get(j).getCourseIDLabel());
+                controller.setCourseName(courseIDarray.get(j));
+//                controller.setCourseName(coursesModel.get(j).getCourseIDLabel());
                 vCourseNames.getChildren().add(nodes[j]);
 
                 final int h = j;
