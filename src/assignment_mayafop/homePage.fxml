@@ -49,9 +49,9 @@
             </Rectangle>
             <Pane fx:id="image1" layoutX="552.0" layoutY="59.0" prefHeight="262.0" prefWidth="429.0">
                <children>
-                  <ImageView fitHeight="244.0" fitWidth="430.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="266.0" fitWidth="430.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/image-20210921141427-1.png" />
+                        <Image url="@Images/553r.jpg" />
                      </image>
                   </ImageView>
                </children>
@@ -69,12 +69,12 @@
                <children>
                   <ImageView fitHeight="264.0" fitWidth="429.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
-                        <Image url="@Images/553231.jpg" />
+                        <Image url="@Images/image-20210921141427-1rer.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="image4" layoutX="552.0" layoutY="59.0" prefHeight="256.0" prefWidth="429.0">
+            <Pane fx:id="image4" layoutX="552.0" layoutY="59.0" prefHeight="261.0" prefWidth="433.0">
                <children>
                   <ImageView fitHeight="276.0" fitWidth="432.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
