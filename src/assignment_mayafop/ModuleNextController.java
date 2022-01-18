@@ -79,7 +79,8 @@ public class ModuleNextController implements Initializable, ControlledScreen{
     private ArrayList<String> lectstaffid = new ArrayList<String>();
     private ArrayList<String> tutostaffid = new ArrayList<String>();
     private ArrayList<String> labstaffid = new ArrayList<String>();
-
+    
+    
     
     ScreenController myController = new ScreenController();
     animation Animation;
@@ -693,6 +694,7 @@ public class ModuleNextController implements Initializable, ControlledScreen{
         
     }
     
+    private ArrayList<String> isStaffAddedInCourseAlready = new ArrayList<String>();
     //Add new course
     public void confirmAddCourse(ActionEvent event){
         try {
@@ -701,7 +703,13 @@ public class ModuleNextController implements Initializable, ControlledScreen{
             loader.load();
             searchModule search = loader.getController();
             System.out.println(search.isEditingMode());
-
+            
+            isStaffAddedInCourseAlready.clear();
+            ResultSet isStaffAddedInCourseAlreadyQuery = connectDB.createStatement().executeQuery("SELECT * FROM staff_teach_course WHERE course_id='"+courseID+"'");
+            while(isStaffAddedInCourseAlreadyQuery.next()) {
+                isStaffAddedInCourseAlready.add(isStaffAddedInCourseAlreadyQuery.getString("staff_id"));
+            }
+            
             //add new course
             if(!search.isEditingMode()){
                 PreparedStatement statement = connectDB.prepareStatement("INSERT INTO course VALUES (?,?,?,?,?,?,?,?,?)");
@@ -843,6 +851,8 @@ public class ModuleNextController implements Initializable, ControlledScreen{
             
             //edit course so need to update
             }else{
+                
+                
                 System.out.println(selectedNode);
                 PreparedStatement statement = connectDB.prepareStatement("UPDATE course SET course_name=?, credit_hour=?, course_category=?, course_year=?, course_sem=?, muet_band=?, nationality=?, programme=? WHERE course_id=?");
                 statement.setString(1,coursename);
@@ -860,11 +870,22 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                 for (int j = 0; j < occ.size(); j++) {
                     String actOcc = occ.get(j);
 
-                    String lectID = courseID + "_L" + actOcc;
-                    String tutoID = courseID + "_T" + actOcc;
-                    String labID = courseID + "_A" + actOcc;
+//                    String lectID = courseID + "_L" + actOcc;
+//                    String tutoID = courseID + "_T" + actOcc;
+//                    String labID = courseID + "_A" + actOcc;
+                    String lectID = "";
+                    String tutoID = "";
+                    String labID = "";
+                    String occid = courseID+"_OCC" + actOcc;
+                    ResultSet queryForIDs = connectDB.createStatement().executeQuery("SELECT * FROM occ WHERE occ_id='"+occid+"'");
+                    while(queryForIDs.next()) {
+                        lectID = queryForIDs.getString("lecture_id");
+                        tutoID = queryForIDs.getString("tutorial_id");
+                        labID = queryForIDs.getString("lab_id");
+                        System.out.println("current lectid is"+lectID);
+                    }
 
-                    if(!lectday.get(j).equals("null")){
+                    if(lectday.get(j) != null){
                         PreparedStatement lectstatement = connectDB.prepareStatement("UPDATE lecture SET lecture_day=?, lecture_start_time=?, lecture_end_time=?, lecture_name=?, lecture_location=? WHERE lecture_id=?");
                         lectstatement.setString(1,misc.formatFullDay(lectday.get(j)));
                         lectstatement.setString(2,misc.formatFullTime(lectstart.get(j)));
@@ -931,10 +952,13 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                         System.out.println(staffTeachLectureStatement);
                         staffTeachLectureStatement.executeUpdate();
                         
-                        PreparedStatement staffTeachCourseLectStatement = connectDB.prepareStatement("UPDATE staff_teach_course SET staff_id=? WHERE course_id=?");
-                        staffTeachCourseLectStatement.setString(1, lectstaffid.get(j).toUpperCase());
-                        staffTeachCourseLectStatement.setString(2, courseID);
-                        staffTeachCourseLectStatement.executeUpdate();
+                        if(isStaffAddedInCourseAlready.contains(lectstaffid.get(j).toUpperCase())){
+                        }else{
+                            PreparedStatement staffTeachCourseLectStatement = connectDB.prepareStatement("UPDATE staff_teach_course SET staff_id=? WHERE course_id=?");
+                            staffTeachCourseLectStatement.setString(1, lectstaffid.get(j).toUpperCase());
+                            staffTeachCourseLectStatement.setString(2, courseID);
+                            staffTeachCourseLectStatement.executeUpdate();
+                        }
                     }
 
                     if(tutostaffid.get(j)!= null){
@@ -944,10 +968,13 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                         System.out.println(staffTeachTutorialStatement);
                         staffTeachTutorialStatement.executeUpdate();
                         
+                        if(isStaffAddedInCourseAlready.contains(lectstaffid.get(j).toUpperCase())){
+                        }else{
                         PreparedStatement staffTeachCourseTutoStatement = connectDB.prepareStatement("UPDATE staff_teach_course SET staff_id=? WHERE course_id=?");
                         staffTeachCourseTutoStatement.setString(1, tutostaffid.get(j).toUpperCase());
                         staffTeachCourseTutoStatement.setString(2, courseID);
                         staffTeachCourseTutoStatement.executeUpdate();
+                        }
                     }
 
                     if(labstaffid.get(j)!= null){
@@ -957,10 +984,13 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                         System.out.println(staffTeachLabStatement);
                         staffTeachLabStatement.executeUpdate();
                         
+                        if(isStaffAddedInCourseAlready.contains(lectstaffid.get(j).toUpperCase())){
+                        }else{
                         PreparedStatement staffTeachCourseLabStatement = connectDB.prepareStatement("UPDATE staff_teach_course SET staff_id=? WHERE course_id=?");
                         staffTeachCourseLabStatement.setString(1, labstaffid.get(j).toUpperCase());
                         staffTeachCourseLabStatement.setString(2, courseID);
                         staffTeachCourseLabStatement.executeUpdate();
+                        }
                     }
 
                     PreparedStatement courseOccStatement = connectDB.prepareStatement("UPDATE course_occ SET course_id=? WHERE occ_id=?");

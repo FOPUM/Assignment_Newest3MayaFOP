@@ -68,6 +68,7 @@ public class registeredStudentController implements Initializable, ControlledScr
     List<registeredStuentDetailsPopupTextModel> studentDetails = new ArrayList<>();
     
     private static String occ;
+    private static String courseMode;
     
     boolean upScreenStatus = false;
     @Override
@@ -200,24 +201,25 @@ public class registeredStudentController implements Initializable, ControlledScr
 
     public void insertCourseDetails(){
         try {
-            for (int i = 0; i < occIDStaff.size(); i++) {
-                    for (int j = 0; j < occIDStaff.size(); j++) {
-                        if (occIDStaff.get(i).equals(occIDStaff.get(j)) && i != j) {
-                            System.out.println("occID is removed this: " + occIDStaff.get(j));
-                            occIDStaff.remove(j);
-                        }
-                    }
-                }
+//            for (int i = 0; i < occIDStaff.size(); i++) {
+//                    for (int j = 0; j < occIDStaff.size(); j++) {
+//                        if (occIDStaff.get(i).equals(occIDStaff.get(j)) && i != j) {
+//                            System.out.println("occID is removed this: " + occIDStaff.get(j));
+//                            occIDStaff.remove(j);
+//                        }
+//                    }
+//                }
             courseDetails.clear();
             for (int j = 0; j < occIDStaff.size(); j++) {
-                
                 courseDetails.add(new registeredStudentDetailsPopupModel(courseIDStaff.get(j),courseNameStaff.get(j), courseOccStaff.get(j), courseCapacity.get(j), courseModeStaff.get(j), courseDayStaff.get(j), courseTimeStaff.get(j), courseLocation.get(j)));
+                
             }
             System.out.println("Course detail size " + courseDetails.size());
             Node[] nodes = new Node[courseDetails.size()];
             
             for (int j = 0; j < nodes.length; j++) {
                 occ = occIDStaff.get(j);
+                courseMode = courseModeStaff.get(j);
                 System.out.println("occccc " + occ);
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/Assignment_MayaFOP/registeredStudentDetailsPopup.fxml"));
@@ -228,14 +230,14 @@ public class registeredStudentController implements Initializable, ControlledScr
                 registeredStudentDetailsPopupController studentDetailsPopupController = loader.getController();
                 //customise content
                 studentDetailsPopupController.setContentInfo(courseDetails.get(j).getCourseCodeLabel(),
-                                                            courseDetails.get(j).getCourseNameLabel(),
-                                                            courseDetails.get(j).getCourseOccLabel(),
-                                                            courseDetails.get(j).getCourseCapacityLabel(),
-                                                            courseDetails.get(j).getCourseModeLabel(),
-                                                            courseDetails.get(j).getCourseDayLabel(),
-                                                            courseDetails.get(j).getCourseTimeLabel(),
-                                                            courseDetails.get(j).getCourseLocationLabel(),
-                                                            occ);               
+                                                             courseDetails.get(j).getCourseNameLabel(),
+                                                             courseDetails.get(j).getCourseOccLabel(),
+                                                             courseDetails.get(j).getCourseCapacityLabel(),
+                                                             courseDetails.get(j).getCourseModeLabel(),
+                                                             courseDetails.get(j).getCourseDayLabel(),
+                                                             courseDetails.get(j).getCourseTimeLabel(),
+                                                             courseDetails.get(j).getCourseLocationLabel(),
+                                                             occ);               
                     
 //                nodes[h].setOnMouseEntered(evt -> {
 //                    //add effect
@@ -250,6 +252,7 @@ public class registeredStudentController implements Initializable, ControlledScr
 //                });
 
                 vContainersPopUpRegisteredStudent.getChildren().add(nodes[j]);
+                
 //                insertStudentDetails();
             }
           
@@ -266,6 +269,9 @@ public class registeredStudentController implements Initializable, ControlledScr
 
     public  String getOcc() {
         return occ;
+    }
+    public  String getcourseMode() {
+        return courseMode;
     }
 
     public static ArrayList<String> getOccIDStaff() {

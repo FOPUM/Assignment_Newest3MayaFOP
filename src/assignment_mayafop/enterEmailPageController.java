@@ -95,16 +95,29 @@ public class enterEmailPageController implements Initializable, ControlledScreen
         try {
             //query for student
             if(!idOrEmailTextField.getText().isEmpty()){
+                System.out.println("Here");
                 String queryForMail = "SELECT siswamail, student_name FROM student WHERE siswamail='"+siswamail+"' OR matric_num = '"+  matricnumOrStaffId + "';";
                 ResultSet mailQueryOutput = connectDB.createStatement().executeQuery(queryForMail);
                 if (mailQueryOutput.next()) {
                     siswamail = mailQueryOutput.getString("siswamail");
+                    System.out.println(siswamail);
                     forgotterName = mailQueryOutput.getString("student_name");
+                    System.out.println(forgotterName);
                     otpText = otpGenerator();
                     sendOtpToForgotter(siswamail,forgotterName, otpText);  
                     System.out.println("OTPText is " + otpText);
                     accStatus = 'S';
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("/Assignment_MayaFOP/enterOTPPage.fxml"));
+                        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                        scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(enterOTPPageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
                 }else if (true) {
+                    System.out.println("Here alsoo");
                      queryForMail = "SELECT staff_email, staff_name FROM staff WHERE staff_email='"+ siswamail +"' OR staff_id = '"+  matricnumOrStaffId + "';";         
                      mailQueryOutput = connectDB.createStatement().executeQuery(queryForMail);
                     if (mailQueryOutput.next()) {
@@ -114,7 +127,17 @@ public class enterEmailPageController implements Initializable, ControlledScreen
                         sendOtpToForgotter(siswamail,forgotterName, otpText); 
                         System.out.println("OTPText is " + otpText);
                         accStatus = 'T';
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("/Assignment_MayaFOP/enterOTPPage.fxml"));
+                            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                            scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(enterOTPPageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
                     }else if (true) {
+                        System.out.println("No here");
                         emailErrorLabel.setText("Account does not exist.Consider sign up?");
                         //set error label *******************************************************************************************************
                     }
@@ -153,15 +176,7 @@ public class enterEmailPageController implements Initializable, ControlledScreen
 //        }
         
         //Go to next page
-        try {
-            root = FXMLLoader.load(getClass().getResource("/Assignment_MayaFOP/enterOTPPage.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(enterOTPPageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         
     }
 
