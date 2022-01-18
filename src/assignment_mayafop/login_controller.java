@@ -284,7 +284,7 @@ public class login_controller implements Initializable,ControlledScreen{
 //Password validation                    
                 }
                 else{ //User not Exist
-                    login_message_label.setText("User not exist. Please sign up.");
+                    login_message_label.setText("User not exist. Please sign up.\nYou have " + (5-loginAttempt) +" chances left");
                 }
     }
     
