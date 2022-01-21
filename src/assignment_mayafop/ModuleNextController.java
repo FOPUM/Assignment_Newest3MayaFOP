@@ -1002,9 +1002,9 @@ public class ModuleNextController implements Initializable, ControlledScreen{
                 }
 
                 System.out.println("Successfully edited!");
+                search.setEditingMode(false);
                 Stage stage = (Stage) confirmButton.getScene().getWindow();
                 stage.close();         
-                search.setEditingMode(false);
                 
             }
             

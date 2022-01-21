@@ -77,16 +77,16 @@ public class login_controller implements Initializable,ControlledScreen{
     public void initialize(URL url, ResourceBundle resourceBundle) {
 //        String otp = otpGenerator();  //testing ******************************************************************************************************
 //        sendOtpToForgotter("kwanyang29@gmail.com","Kwan Yang", otp); // testing **********************************************************************
-        username_text_field.setText("A1001");
-        password_field.setText("angtf");
+//        username_text_field.setText("u2102856");
+//        password_field.setText("U2102856");
         if (loginAttemptFile.exists()) {
             try {
             
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(loginAttemptFile));
             while(true){
                 loginAttempt = in.readInt();
-                loginAttempt = 0;
-                System.out.println("Attempts: " + loginAttempt);
+//                loginAttempt = 0;
+//                System.out.println("Attempts: " + loginAttempt);
                 in.close();
             }
         }   catch(EOFException ex){
@@ -134,9 +134,13 @@ public class login_controller implements Initializable,ControlledScreen{
     
     public void checkConditionForLogin() throws SQLException, IOException{
         //Click on login button
-        loginAttempt++;
+       
+        
+        
         if (loginAttempt > 4) {
-            login_message_label.setText("You have tried too many times.\nPlease wait for 1 minute");
+            login_message_label.setText("You have tried too many times.\nPlease wait for 10 seconds");
+            UpdateloginAttemptFile();
+            System.out.println(loginAttempt);
             //Set disable timer
             new Thread() {
                 public void run() {
@@ -146,7 +150,7 @@ public class login_controller implements Initializable,ControlledScreen{
                         }
                     });
                     try {
-                        Thread.sleep(60000); //wait 1 minute
+                        Thread.sleep(10000); //wait 1 minute
                     }
                     catch(InterruptedException ex) {
                     }
@@ -167,6 +171,7 @@ public class login_controller implements Initializable,ControlledScreen{
                 UpdateloginAttemptFile();
                 login_message_label.setText("Please enter username and password.\nYou have " + (5-loginAttempt) +" chances left");
             }
+            loginAttempt++;
             //Create home page
             if(validated == 1){
                 myController.loadScreen(Assignment_MayaFOP.controlCenter, Assignment_MayaFOP.navigationFile);

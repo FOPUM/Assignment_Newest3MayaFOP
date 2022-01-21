@@ -72,6 +72,7 @@ public class SendMail {
             } 
         } catch (Exception ex) {
             System.out.println("You have connection problem, please try again");
+            System.out.println(ex.getMessage());
             //Show "You have connection problem, please try again"
         } 
 

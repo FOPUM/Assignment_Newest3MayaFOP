@@ -60,6 +60,8 @@ public class registerControlStudent implements Initializable,ControlledScreen {
     ScreenController myController;
     animation Animation;
     login_controller LoginControl = new login_controller(); 
+    MiscFunc misc = new MiscFunc();
+    
     @FXML
     private Button back_button;
     @FXML
@@ -139,7 +141,7 @@ public class registerControlStudent implements Initializable,ControlledScreen {
         ObservableList<String> faculty = FXCollections.observableArrayList("Faculty of Computer Science and Information System");
         ObservableList<String> batch = FXCollections.observableArrayList("2020/2021", "2021/2022");
         ObservableList<String> programme = FXCollections.observableArrayList("Software Engineer", "Artificial Intelligence", "Data Science", "Computer System and Networking", "Information System", "Multimedia");
-        ObservableList<String> race = FXCollections.observableArrayList("Malay", "Indian", "Chinese");
+        ObservableList<String> race = FXCollections.observableArrayList("Malay", "Indian", "Chinese","Others");
         ObservableList<String> nationality = FXCollections.observableArrayList("Malaysian", "Others");
         
         genderComboBox.setItems(gender);
@@ -256,7 +258,7 @@ public class registerControlStudent implements Initializable,ControlledScreen {
             statement.setString(4,fullname);
             statement.setString(5,batch);
             statement.setString(6,faculty);
-            statement.setString(7,programme);
+            statement.setString(7,misc.formatToShortProgramme(programme));
             statement.setString(8,gender);
             statement.setString(9,race);
             statement.setDate(10,sqlDate);

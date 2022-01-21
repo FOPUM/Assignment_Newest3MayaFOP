@@ -171,7 +171,6 @@ public class registeredStudentController implements Initializable, ControlledScr
                                 ") AS currentCa ON currentCa.occ_id=occ.occ_id\n" +
                                 "WHERE staff.staff_id='"+matric_num+"') AS labb";
             //</editor-fold>
-            
             ResultSet courseIDQuery = connectDB.createStatement().executeQuery(courseDetailss);
             while(courseIDQuery.next()) {
                 occIDStaff.add(courseIDQuery.getString("occ_id"));
@@ -193,6 +192,33 @@ public class registeredStudentController implements Initializable, ControlledScr
                 courseTimeStaff.add(time);
                 courseLocation.add(courseIDQuery.getString("location"));
             }    
+            
+            
+            
+            
+            
+            
+//            ResultSet courseIDQuery = connectDB.createStatement().executeQuery(courseDetailss);
+//            while(courseIDQuery.next()) {
+//                occIDStaff.add(courseIDQuery.getString("occ_id"));
+//                courseIDStaff.add(courseIDQuery.getString("course_id"));
+//                courseNameStaff.add(courseIDQuery.getString("course_name"));
+//                courseOccStaff.add(courseIDQuery.getString("occ_name"));
+//                
+//                String currentcapacity = courseIDQuery.getString("currentCapacity");
+//                if(courseIDQuery.getString("currentCapacity") == null){
+//                    currentcapacity = "0";
+//                }
+//                
+//                String capacity = currentcapacity +"/" + courseIDQuery.getString("occCapacity");
+//                courseCapacity.add(capacity);
+//                courseModeStaff.add(courseIDQuery.getString("courseMode"));
+//                courseDayStaff.add(courseIDQuery.getString("courseDay"));
+//                
+//                String time = misc.formatTime(courseIDQuery.getString("startingTime")) + "-" + misc.formatTime(courseIDQuery.getString("endingTime"));
+//                courseTimeStaff.add(time);
+//                courseLocation.add(courseIDQuery.getString("location"));
+//            }    
         } catch (SQLException e) {
             Logger.getLogger(userAccount.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();

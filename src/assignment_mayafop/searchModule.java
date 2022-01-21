@@ -184,6 +184,9 @@ public class searchModule implements Initializable, ControlledScreen {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         courseIDcheck.clear();
         occurenceIDcheck.clear();
+//        dayCheck.clear();
+//        startTimeCheck.clear();
+//        endTimeCheck.clear();
         selectedDayCheck.clear();
         selectedStartTimeCheck.clear();
         selectedEndTimeCheck.clear();
@@ -540,19 +543,19 @@ public class searchModule implements Initializable, ControlledScreen {
                 System.out.println("Start Time of this picking lecture is: " + startTime);
                 Date endTime = sdf.parse(endTimeString);
                 System.out.println("End Time of this picking lecture is: " + endTime);
-                for (int j = 0; j < startlist.size(); j++) {
-                    if (startlist.get(j) != null ) {
-                        Date startTimeForCheck = sdf.parse(startlist.get(j));
+//                for (int j = 0; j < dayIndex.size(); j++) {
+//                    if (startlist.get(dayIndex.get(0)) != null ) {
+                        Date startTimeForCheck = sdf.parse(startlist.get(dayIndex));
                         System.out.println(startTime+ " Checking with: " + startTimeForCheck);
-                        Date endTimeForCheck = sdf.parse(endlist.get(j));
+                        Date endTimeForCheck = sdf.parse(endlist.get(dayIndex));
                         System.out.println(endTime+ " Checking with: " + endTimeForCheck);
                         if(isOverlapping(startTime, endTime, startTimeForCheck, endTimeForCheck)){
 //                        System.out.println("array start " + startlist.get(j));
 //                        System.out.println("array end " + endlist.get(j));
 //                        System.out.println("Crash Time!");
-                        return 1;
-                    }
-                    }
+                            return 1;
+//                        }
+//                    }
                     
                 }
             } catch (ParseException | NullPointerException ex) {
@@ -568,11 +571,20 @@ public class searchModule implements Initializable, ControlledScreen {
         return 0;
     }
     
+    int dayIndex;
     public int checkDay(String studyDay, ArrayList<String> studyDayArray) {
 //        System.out.println("ori " + studyDay);
+        System.out.println("All day in the list is " + dayCheck.toString());
+        System.out.println("All start in the list is " + startTimeCheck.toString());
+        System.out.println("All end in the list is " + endTimeCheck.toString());
+        
         if(!studyDay.equals("null")){
+            System.out.println("Current day is " + studyDay);
             for (int j = 0; j < studyDayArray.size(); j++) {
+                System.out.println("Checking with " + studyDayArray.get(j));
                 if(studyDay.equals(studyDayArray.get(j))){
+                    dayIndex = j;
+                    System.out.println("index is " + dayIndex);
                     System.out.println("Study day: " + studyDay + " is equal to " + studyDayArray.get(j) + " in array");
 //                    System.out.println("Crash Day");
                     return 1;
@@ -590,21 +602,21 @@ public class searchModule implements Initializable, ControlledScreen {
         checkDayInt += checkDay(lectday, dayCheck);
         if(checkDayInt > 0){
             System.out.println("They are on the same day, let's check time");
-            if(isTimeCrashingInDatabase()){
+            if(isTimeCrashingInDatabase('L')){
                 return true;
             }
         }
         String tutoday = "" + courseTableView.getSelectionModel().getSelectedItem().getTutoDay();
         checkDayInt += checkDay(tutoday, dayCheck);
         if(checkDayInt > 0){
-            if(isTimeCrashingInDatabase()){
+            if(isTimeCrashingInDatabase('T')){
                 return true;
             }
         }
         String labday = "" + courseTableView.getSelectionModel().getSelectedItem().getLabDay();
         checkDayInt += checkDay(labday, dayCheck);
         if(checkDayInt > 0){
-            if(isTimeCrashingInDatabase()){
+            if(isTimeCrashingInDatabase('A')){
                 return true;
             }
         }
@@ -612,27 +624,34 @@ public class searchModule implements Initializable, ControlledScreen {
         return false;
     }
     
-    public boolean isTimeCrashingInDatabase(){
+    public boolean isTimeCrashingInDatabase(char mode){
         int checkTimeInt = 0; //if larger then 0, means crash
 
-        String lectStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLectStartTime();
-        String lectEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLectEndTime();
-        checkTimeInt += checkTime(lectStartTime, lectEndTime, startTimeCheck, endTimeCheck);
-        if(checkTimeInt > 0){
-            return true;
+        if(mode == 'L'){
+            String lectStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLectStartTime();
+            String lectEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLectEndTime();
+            checkTimeInt += checkTime(lectStartTime, lectEndTime, startTimeCheck, endTimeCheck);
+            if(checkTimeInt > 0){
+                return true;
+            }   
         }
-        String tutoStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getTutoStartTime();
-        String tutoEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getTutoEndTime();
-        checkTimeInt += checkTime(tutoStartTime, tutoEndTime, startTimeCheck, endTimeCheck);
-        if(checkTimeInt > 0){
-            return true;
+        
+        if(mode == 'T'){
+            String tutoStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getTutoStartTime();
+            String tutoEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getTutoEndTime();
+            checkTimeInt += checkTime(tutoStartTime, tutoEndTime, startTimeCheck, endTimeCheck);
+            if(checkTimeInt > 0){
+                return true;
+            }
         }
 
-        String labStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLabStartTime();
-        String labEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLabEndTime();
-        checkTimeInt += checkTime(labStartTime, labEndTime, startTimeCheck, endTimeCheck);
-        if(checkTimeInt > 0){
-            return true;
+        if(mode == 'A'){
+            String labStartTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLabStartTime();
+            String labEndTime = "" + courseTableView.getSelectionModel().getSelectedItem().getLabEndTime();
+            checkTimeInt += checkTime(labStartTime, labEndTime, startTimeCheck, endTimeCheck);
+            if(checkTimeInt > 0){
+                return true;
+            }
         }
         
         
@@ -712,6 +731,8 @@ public class searchModule implements Initializable, ControlledScreen {
                             selectedStartTimeCheck.add(labStartTime);
                             endTimeCheck.add(labEndTime);
                             selectedEndTimeCheck.add(labEndTime);
+                            
+                            dayIndex = 0;
         
 //                            System.out.println(addingCourse + " Has been add");
                         }
@@ -1062,6 +1083,7 @@ public class searchModule implements Initializable, ControlledScreen {
                 }
                 myController.showPopupStage(searchScreen, "/assignment_MayaFOP/Module.fxml");
                 showing = myController.getShowing(); 
+                setEditingMode(false);
             }
         }else{
             courseWarningLabel.setText("Please edit your course only!");
